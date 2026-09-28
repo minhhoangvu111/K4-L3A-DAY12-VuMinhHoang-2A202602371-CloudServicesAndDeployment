@@ -45,13 +45,10 @@ class ConversationStore:
         return f"history:{user_id}"
 
     def ping(self) -> bool:
-        """Redis có trả lời không? Dùng cho endpoint /ready.
-
-        TODO (CP4): gọi ``self.client.ping()`` trong try/except.
-        Trả ``True`` nếu thành công, ``False`` nếu có bất kỳ Exception nào
-        (mất mạng, sai mật khẩu, Redis chưa khởi động...).
-        """
-        raise NotImplementedError("TODO (CP4): cài đặt ping")
+        try:
+            return bool(self.client.ping())
+        except Exception:
+            return False
 
     def append(self, user_id: str, role: str, content: str) -> None:
         key = self._key(user_id)
